@@ -1,12 +1,26 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
+import {bootstrapApplication} from '@angular/platform-browser';
 
-import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
+import { AppComponent } from './app/app.component';
+import { routes } from './app/ROUTES';
+import { IonicModule } from '@ionic/angular';
+import { provideRouter } from '@angular/router';
+import { provideLottieOptions } from 'ngx-lottie';
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(routes),
+    provideLottieOptions({
+      player: () => import(/* webpackChunkName: 'lottie-web' */ 'lottie-web'),
+    }),
+     importProvidersFrom(
+        IonicModule.forRoot(),
+     )
+  ]
+  })
+  .catch(err=>console.log(err));
